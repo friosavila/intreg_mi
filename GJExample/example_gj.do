@@ -34,7 +34,8 @@ gen log_liv=log(sqft_living)
 gen log_lot=log(sqft_lot)
 gen age_hs = 2015-yr_built
 gen renov = yr_renovated!=0
-
+/******************************************************************************/
+** This is the core.
 ** Interval Regression
 intreg log_ll log_uu  bedrooms bathrooms log_liv log_lot floors waterfront view condition grade age_hs  renov, het(bedrooms bathrooms log_liv log_lot floors waterfront view condition grade age_hs  renov)
 ** Imputation Code:
@@ -48,7 +49,7 @@ save `temp'
 mi import wide , imputed(log_price=log_price1-log_price10)
 ** create a variable based on imputed ones (passive)
 mi passive:gen price_1k_hat=exp(log_price)
-
+/******************************************************************************/
 ** Analysis : C Quantile regression
 ssc install qrprocess
 gen logp1k=log(price_1k)
