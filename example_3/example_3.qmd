@@ -1,0 +1,75 @@
+---
+title: Hourly Wage analysis using MORG-CPS 2018
+author: "Fernando Rios-Avila"
+format: 
+  html: 
+    code-fold: true
+    echo: true
+    output: false
+    keep-ipynb: true
+jupyter: nbstata
+---
+
+
+## Setup
+
+For the following analysis, all the data process is done in the file `example.do`.
+
+This do-file loads the data and creates auxiliary variables that mimic the interval censoring of the data (in this case wages). 
+
+Using the brackets data, it estimates the heteroskedastic interval regression model, and then uses the `intreg_mi` command to obtain the imputations for the data. We assume 3 cases, where data is categorized in 5, 7, and 10 groups.
+
+The imputed data is then used to estimate conditional and unconditional quantile regressions, using the fully observed data, and the imputed data.
+
+The results are then saved in a matrix, and then used to create the figures.
+
+```stata
+ssc install frause
+run example.do
+```
+
+## Model Specification
+
+For Imputation we assume wages are a function of the following variables: month in sample, age, age squared, gender, highest degree obtained, if worked less than 35hrs a week, class of worker, if usually receives Overtime and Tips, Is a union member, presence and number of own children in the household, relation to family members, and marital status. 
+
+For modeling, we only consider age and age squared, gender, highest degree obtained, if is a union member or not, marital status and if there is a child present. 
+
+Only a selected set of variables are used for the plots.
+
+## Ploting Conditional and Unconditional Quantile Regressions
+
+:::{.panel-tabset}
+
+## 5 groups
+
+::: {layout-ncol=2 .column-screen}
+
+![Conditional Quantile Regression](fig_5_cqr.png)
+
+![Unconditional Quantile Regression](fig_5_uqr.png)
+
+:::
+
+
+## 7 groups
+
+::: {layout-ncol=2 .column-screen}
+
+![Conditional Quantile Regression](fig_7_cqr.png)
+
+![Unconditional Quantile Regression](fig_7_uqr.png)
+
+:::
+
+
+## 10 groups
+
+::: {layout-ncol=2 .column-screen}
+
+![Conditional Quantile Regression](fig_10_cqr.png)
+
+![Unconditional Quantile Regression](fig_10_uqr.png)
+
+:::
+
+:::
