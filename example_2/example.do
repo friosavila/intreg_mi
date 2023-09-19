@@ -1,3 +1,12 @@
+ssc install qrprocess, replace
+ssc install palettes, replace
+ssc install colrspace  , replace
+ssc install grstyle, replace
+ssc install color_style, replace
+net install fra, from(https://friosavila.github.io/stpackages)
+fra install lbsvmat, replace
+ssc install frause
+
 ** Load Data
 frause hhprice, clear
 ** Create Log of Price 

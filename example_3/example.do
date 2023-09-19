@@ -1,12 +1,4 @@
 clear all
-** Load Packages
-ssc install qrprocess, replace
-ssc install palettes, replace
-ssc install colrspace  , replace
-ssc install grstyle, replace
-ssc install color_style, replace
-net install fra, from(https://friosavila.github.io/stpackages)
-fra install lbsvmat, replace
 ** Load Data
 use https://data.nber.org/morg/annual/morg18, clear
 drop if earnhre==.
