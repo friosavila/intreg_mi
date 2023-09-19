@@ -6,7 +6,7 @@ format:
     code-fold: true
     echo: true
     output: false
-    keep-ipynb: true
+    embed-resources: true
 jupyter: nbstata
 ---
 

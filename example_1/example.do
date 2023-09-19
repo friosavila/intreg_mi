@@ -1,105 +1,81 @@
 clear all
 ** Load Packages
-ssc install qrprocess, replace
+/*ssc install qrprocess, replace
 ssc install palettes, replace
 ssc install colrspace  , replace
 ssc install grstyle, replace
 ssc install color_style, replace
+ssc install rif, replace
 net install fra, from(https://friosavila.github.io/stpackages)
-fra install lbsvmat, replace
+fra install lbsvmat, replace*/
 ** Load Data
-use https://data.nber.org/morg/annual/morg18, clear
-drop if earnhre==.
+frause oaxaca, clear
 
-gen mstatus = 1 if inlist(marital,1,2,3)
-replace mstatus = 2 if marital == 7 
-replace mstatus = 3 if mstatus ==.
+gen mstatus = 1     if single==1
+replace mstatus = 2 if married==1
+replace mstatus = 3 if divorced==.
  
 ** Analyzing Hourly wages
-** First create logHourly wages
-gen logwage = log(earnhre/100)
-** vet
-gen vet0 = 0
-replace vet0 = 1 if vet1==1 | vet2==1 | vet3==1 | vet4==1 
-
-** Data is censored on high wages. but will assume its 
 ** Define number of groups: local g
-sum logwage, meanonly
+sum lnwage, meanonly
 local mmin=r(min)
 local mmax=r(max)
 
 ** Equidistant groups
 foreach g in 5 7 10 {
     local delta = (`mmax' - `mmin')/`g'
-    gen logwage`g' = 0
-    gen logwage`g'_min = .
-    gen logwage`g'_max = .
+    gen lnwage`g' = 0
+    gen lnwage`g'_min = .
+    gen lnwage`g'_max = .
     forvalues i = 1/`g' {
-        replace logwage`g' = logwage`g'+1 if logwage>=`mmin'+(`i'-1)*`delta' 
-        replace logwage`g'_min = `mmin'+(`i'-1)*`delta' if logwage`g'==`i'
-        replace logwage`g'_max = logwage`g'_min+`delta'  if logwage`g'==`i'
-        if `i'== 1 replace logwage`g'_min=.  if logwage`g'==`i'
-        if `i'==`g' replace logwage`g'_max=. if logwage`g'==`i'
+        replace lnwage`g' = lnwage`g'+1 if lnwage>=`mmin'+(`i'-1)*`delta' 
+        replace lnwage`g'_min = `mmin'+(`i'-1)*`delta' if lnwage`g'==`i'
+        replace lnwage`g'_max = lnwage`g'_min+`delta'  if lnwage`g'==`i'
+        if `i'== 1 replace lnwage`g'_min=.  if lnwage`g'==`i'
+        if `i'==`g' replace lnwage`g'_max=. if lnwage`g'==`i'
     }
 }  
 
-gen age2 = (age-40)*(age-40)
-gen 	raced = 1 if race==1
-replace raced = 2 if race==2
-replace raced = 3 if raced==.
-
-gen 	hgrade = 1 if grade92<=38  
-replace hgrade = 2 if inlist(grade92,39)
-replace hgrade = 3 if inlist(grade92,40)
-replace hgrade = 4 if inlist(grade92,41,42,43)
-replace hgrade = 5 if inlist(grade92,44,45,46)
-
-
-gen hourslw2=hourslw^2
-gen less35 = hourslw<35
-global indepvar  minsamp age age2 i.sex i.hgrade  i.otc i.unionmme ///
-				 chldpres ownchild i.pfamrel i.mstatus
-
- foreach i in 5 7 10 {
-    global depvar   logwage`i'_min logwage`i'_max 
-    qui:intreg $depvar $indepvar [pw=earnwt ], het($indepvar)
+ 
+ 
+global indepvar  educ exper tenure female age agesq i.mstatus
+local toimp 
+foreach i in 5 7 10 {
+    global depvar   lnwage`i'_min lnwage`i'_max 
+    qui:intreg $depvar $indepvar  , het($indepvar)
     intreg_mi i`i'var, seed(111)
     gen ivar`i'=.
     local toimp `toimp' ivar`i' = i`i'var*
 }
 
 save tosave, replace
+
 use tosave, replace
 
-** Import Data into mi
- foreach i in 5 7 10 {
- 
-    local toimp `toimp' ivar`i' = i`i'var*
-}
 mi import wide, imputed(`toimp')
 
 
 capture matrix drop _all
 ** Estimates Baseline model using Cqreg and uqreg
-global depvar0 logwage
-global indvar0 age age2 i.sex i.hgrade  i.unionmme i.mstatus chldpres
+global depvar0 lnwage
+global indvar0 educ exper tenure female age
 
 forvalues i = 5(5)95 {
 	local ii = `i'/100
-	qrprocess     $depvar0 $indvar0 [pw=earnwt ] , q(`ii') 
+	qrprocess     $depvar0 $indvar0  , q(`ii') 
 	qui:ereturn display
-	matrix cqr = nullmat(cqr)\r(table)',J(12,1,`i')
-	rifhdreg $depvar0 $indvar0 [pw=earnwt ], rif(q(`i'))
-	matrix uqr = nullmat(uqr)\r(table)',J(16,1,`i')
+	matrix cqr = nullmat(cqr)\r(table)',J(6,1,`i')
+	rifhdreg $depvar0 $indvar0  , rif(q(`i'))
+	matrix uqr = nullmat(uqr)\r(table)',J(6,1,`i')
 }
 
 foreach j in 5 7 10 {
 	forvalues i = 5(5)95 {
 		local ii = `i'/100
-		mi estimate, cmdok post:qrprocess     ivar`j' $indvar0 [pw=earnwt ], q(`ii')  
-		matrix i`j'cqr = nullmat(i`j'cqr)\r(table)',J(12,1,`i')
-		mi estimate, cmdok post:rifhdreg ivar`j' $indvar0 [pw=earnwt ], rif(q(`i'))
-		matrix i`j'uqr = nullmat(i`j'uqr)\r(table)',J(16,1,`i')
+		mi estimate, cmdok post:qrprocess     ivar`j' $indvar0  , q(`ii')  
+		matrix i`j'cqr = nullmat(i`j'cqr)\r(table)',J(6,1,`i')
+		mi estimate, cmdok post:rifhdreg ivar`j' $indvar0  , rif(q(`i'))
+		matrix i`j'uqr = nullmat(i`j'uqr)\r(table)',J(6,1,`i')
 	}
 }	
 
@@ -124,7 +100,7 @@ color_style tableau
  
 foreach k in 5 7 10 {  
 	local ii = 0
-	foreach i in 2.unionmme 2.sex 5.hgrade age {
+	foreach i in educ exper female age {
     local ii = `ii'+1
  
     two (rarea     cqr5     cqr6 cqr10     if cqr_nm=="`i'", pstyle(p1) color(%50)) ///

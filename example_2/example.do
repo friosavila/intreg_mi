@@ -1,4 +1,5 @@
 ssc install qrprocess, replace
+ssc install rif, replace
 ssc install palettes, replace
 ssc install colrspace  , replace
 ssc install grstyle, replace
