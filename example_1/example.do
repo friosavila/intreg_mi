@@ -1,13 +1,17 @@
 clear all
 ** Load Packages
-/*ssc install qrprocess, replace
+ssc install qrprocess, replace
 ssc install palettes, replace
 ssc install colrspace  , replace
 ssc install grstyle, replace
 ssc install color_style, replace
 ssc install rif, replace
 net install fra, from(https://friosavila.github.io/stpackages)
-fra install lbsvmat, replace*/
+fra install lbsvmat, replace
+fra install intreg_mi, replace
+ssc install frause
+ssc install moremata
+
 ** Load Data
 frause oaxaca, clear
 
