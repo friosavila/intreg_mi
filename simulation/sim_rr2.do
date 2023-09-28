@@ -84,4 +84,7 @@ clear
     matrix b = b1,b2,b3,b4,b5,b6
     ereturn post b
 end    
- 
+
+parallel initialize 5
+parallel sim, reps(2500):sim_interval
+save sim_rr3.dta, replace 

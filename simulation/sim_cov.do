@@ -82,7 +82,8 @@ program sim, eclass
 	matrix b = b1,b2,b3,b4,b5
 	ereturn post b
 end
- 
+
+*** This one compares the use of controls during imputation with Different setups
 parallel initialize 10
 parallel sim, reps(2500):sim
 save sim_cov2.dta, replace
@@ -93,7 +94,7 @@ save sim_cov2.dta, replace
 capture program drop sim
 program sim, eclass
 	clear
-	set obs 100000
+	set obs 1000
 	gen x1=rnormal()
 	gen x2=rnormal()
 	gen x3=rnormal()
@@ -127,10 +128,10 @@ program sim, eclass
 	global xv3 x1 x2 x3
 
 	foreach i in 0 3 {
-		intreg lmin5  lmax5 ${xv`i'}  , het(${xv`i'})
+		intreg lmin5  lmax5 ${xv`i'}  , het(${xv3})
 		intreg_mi m5c`i'
 		gen y5c`i'=.
-		intreg lmin15 lmax15 ${xv`i'} , het(${xv`i'})	 
+		intreg lmin15 lmax15 ${xv`i'} , het(${xv3})	 
 		intreg_mi m15c`i'
 		gen y15c`i'=.
 	}
@@ -171,6 +172,26 @@ program sim, eclass
 	ereturn post b
 end
 
-parallel initialize 14
+** This one does the second option.  Data is created without controls for Cmean
+** But we add it
+parallel initialize 16
 parallel sim, reps(2500):sim
 save sim_cov3.dta, replace
+
+** 5  break
+fgsum abs(fq10_b_x1-s2q10_b_x1) abs(fq10_b_x1-s4q10_b_x1) ///
+	  abs(fq50_b_x1-s2q50_b_x1) abs(fq50_b_x1-s4q50_b_x1) ///
+	  abs(fq90_b_x1-s2q90_b_x1) abs(fq90_b_x1-s4q90_b_x1)
+** 15 break      
+fgsum abs(fq10_b_x1-s3q10_b_x1) abs(fq10_b_x1-s5q10_b_x1) ///
+	  abs(fq50_b_x1-s3q50_b_x1) abs(fq50_b_x1-s5q50_b_x1) ///
+	  abs(fq90_b_x1-s3q90_b_x1) abs(fq90_b_x1-s5q90_b_x1)
+      
+** 5  break
+fgsum abs(fq10_b_x1-s2q10_b_x1) abs(fq10_b_x1-s4q10_b_x1) ///
+	  abs(fq50_b_x1-s2q50_b_x1) abs(fq50_b_x1-s4q50_b_x1) ///
+	  abs(fq90_b_x1-s2q90_b_x1) abs(fq90_b_x1-s4q90_b_x1)
+** 15 break      
+fgsum abs(fq10_b_x1-s3q10_b_x1) abs(fq10_b_x1-s5q10_b_x1) ///
+	  abs(fq50_b_x1-s3q50_b_x1) abs(fq50_b_x1-s5q50_b_x1) ///
+	  abs(fq90_b_x1-s3q90_b_x1) abs(fq90_b_x1-s5q90_b_x1)      
