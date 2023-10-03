@@ -21,7 +21,7 @@ The following examples are provided:
 
 - Example 1: 
   - Title: Wage analysis using "Swiss Labor Market Survey 1998" data.
-  - Data source: Example file from -oaxaca- command (Jann, 2008).
+  - Data source: Jann, B. (2003). The Swiss Labor Market Survey 1998 (SLMS 98). Schmollers Jahrbuch : Zeitschrift für Wirtschaftsund Sozialwissenschaften, 123(2), 329-335. <https://nbn-resolving.org/urn:nbn:de:0168-ssoar-409467>
   - File: <example_1.qmd>
   
 - Example 2:
@@ -34,3 +34,8 @@ The following examples are provided:
   - Title: Wage analysis using ASEC-CPS
   - Data Source: Impums March 2018 ASEC-CPS
   - File: <example_3.qmd>
+
+- Example 4:
+  - Title: Housing Prices: King County, USA
+  - Data Source: <https://www.kaggle.com/datasets/harlfoxem/housesalesprediction>
+  - File: [asd](example_4/example_4.ipynb)

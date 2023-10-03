@@ -1,0 +1,57 @@
+---
+title: Price analysis: House Sales in King County, USA
+author: "Fernando Rios-Avila"
+format: 
+  html: 
+    code-fold: true
+    echo: true
+    output: false
+    keep-ipynb: true
+jupyter: nbstata
+---
+
+## Setup
+
+For the following analysis, all the data process is done in the file `example.do`.
+
+This do-file loads the data and creates auxiliary variables that mimic the interval censoring of the data (in this case price). 
+
+Using the brackets data, it estimates the heteroskedastic interval regression model, and then uses the `intreg_mi` command to obtain the imputations for the data. We assume 8 brackets, with widths of 100, except for the first (200) and last bracket (no max house price). 
+
+The imputed data is then used to estimate conditional and unconditional quantile regressions, using the fully observed data, and the imputed data.
+
+The results are then saved in a matrix, and then used to create the figures.
+
+```stata
+run example.do
+```
+
+## Model Specification
+
+For Imputation we use log of prices as the dependent variable, and control for: # of bedrooms, #bathrooms, Log living area, Log Lot area, # of floors, if it at the Waterfront, if it has a view, condition of the house, grade of the house, age of the house, and if it was renovated. We model both conditional mean and conditional variance.
+
+For modeling, we only consider the following: # of bedrooms, #bathrooms, Log living area, Log Lot area, # of floors, if it at the Waterfront, and if it has a view.
+
+## Ploting Conditional and Unconditional Quantile Regressions
+
+:::{.panel-tabset}
+
+## Conditional Quantile Regression
+
+::: {layout-ncol=1 .column-screen}
+
+![](fig1.png)
+
+:::
+
+
+## Unconditional Quantile Regression
+
+::: {layout-ncol=1 .column-screen}
+
+![](fig2.png)
+
+:::
+
+
+:::
