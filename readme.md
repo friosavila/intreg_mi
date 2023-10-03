@@ -22,20 +22,20 @@ The following examples are provided:
 - Example 1: 
   - Title: Wage analysis using "Swiss Labor Market Survey 1998" data.
   - Data source: Jann, B. (2003). The Swiss Labor Market Survey 1998 (SLMS 98). Schmollers Jahrbuch : Zeitschrift für Wirtschaftsund Sozialwissenschaften, 123(2), 329-335. <https://nbn-resolving.org/urn:nbn:de:0168-ssoar-409467>
-  - File: <example_1.qmd>
   
 - Example 2:
   - Title: Melrbourne Housing Market
   - Data source: <https://www.kaggle.com/datasets/dansbecker/melbourne-housing-snapshot>
     Data has been adapted and clean. Currently from `frause`
-  - File: <example_2.qmd>
   
 - Example 3:
-  - Title: Wage analysis using ASEC-CPS
-  - Data Source: Impums March 2018 ASEC-CPS
-  - File: <example_3.qmd>
+  - Title: Wage analysis using Merged Outgoing Rotation Groups (MORG) 2018
+  - Data Source: <https://data.nber.org/morg/annual/>
 
 - Example 4:
   - Title: Housing Prices: King County, USA
   - Data Source: <https://www.kaggle.com/datasets/harlfoxem/housesalesprediction>
-  - File: [asd](example_4/example_4.ipynb)
+
+- Example 5:
+  - Title: Poverty analysis using ASEC-CPS 2018
+  - Data Source: Ipums March 2018 ASEC-CPS. Analysis at household Level
