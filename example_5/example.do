@@ -79,8 +79,8 @@ forvalues j = 1/16 {
 }
 
 ** Into logs
-gen log_ll=log(ll)
-gen log_uu=log(uu)
+gen log_ll=log(ll/fsize)
+gen log_uu=log(uu/fsize)
 
 ***
 bysort hhid:egen educ_h = max(educ)
@@ -120,12 +120,12 @@ save `temp'
 
 mi import wide , imputed(mhhinc=mhinc*)
 ** create a variable based on imputed ones (passive)
-mi passive:gen ihhinc=exp(mhhinc)
+mi passive:gen ihhinc=exp(mhhinc)*fsize
 
 gen povoff  = (offtotval<offcutoff)*100
 mi passive:gen ipovoff =(ihhinc<offcutoff)*100
  
-
+ 
 ** Small Analysis
 
 mean povoff [pw=asecwth*fsize], over(hrace)
@@ -171,8 +171,8 @@ matrix list b
 adde repost b=b, rename
 est sto m4b
 
-esttab m2a m2b using tbl1, se nostar mtitle("Fully Observed" "Imputed") nonum lab note("")
+esttab m2a m2b using tbl1, se nostar mtitle("Fully Observed" "Imputed") nonum lab md note("") replace
 
-esttab m3a m3b using tbl2, se nostar mtitle("Fully Observed" "Imputed") nonum lab md note("")
+esttab m3a m3b using tbl2, se nostar mtitle("Fully Observed" "Imputed") nonum lab md note("") replace
 
-esttab m4a m4b using tbl3, se nostar mtitle("Fully Observed" "Imputed") nonum lab md note("")
+esttab m4a m4b using tbl3, se nostar mtitle("Fully Observed" "Imputed") nonum lab md note("") replace

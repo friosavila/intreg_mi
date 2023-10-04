@@ -126,7 +126,7 @@ foreach i in 1 2 3 4 5 6 7 8 {
 		legend(order(1 "Observed data" 3 "Imputed Data") pos(6) col(2))  name(m`i', replace) ///
 		title(`tlt')
 } 
-graph combine m1 m2 m3 m4 m5 m6 m7 m8, xsize(16) ysize(9) iscale(0.5)
+grc1leg m1 m2 m3 m4 m5 m6 m7 m8, cols(4) xsize(16) ysize(8) iscale(0.6)
 graph export fig1.png, width(2000) replace
 
 foreach i in 1 2 3 4 5 6 7 8 {
@@ -140,7 +140,7 @@ foreach i in 1 2 3 4 5 6 7 8 {
 		legend(order(1 "Observed data" 3 "Imputed Data") pos(6) col(2))  name(m`i', replace) ///
 		title(`tlt')
 } 
-grc1leg m1 m2 m3 m4 m5 m6 m7 m8,   cols(4) xsize(16) ysize(9) iscale(0.5)
+grc1leg m1 m2 m3 m4 m5 m6 m7 m8,   cols(4) xsize(16) ysize(8) iscale(0.6)
 graph export fig2.png, width(2000) replace
 }
  
