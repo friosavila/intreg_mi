@@ -13,7 +13,7 @@ jupyter: nbstata
 
 ## Setup
 
-For the following analysis, all the data process is done in the file `example.do`.
+For the following analysis, all the data process is done in the file [`example.do`](example.do).
 
 This do-file loads the data and creates auxiliary variables that mimic the interval censoring of the data (in this case wages). 
 
